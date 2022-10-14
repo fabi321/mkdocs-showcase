@@ -6,8 +6,8 @@
 pip install mkdocs mkdocs-material
 ```
 
-!!! note "Verwendung des proxy"
-	In der schule muss python die verwendung des Proxy mittgeteilt werden. Dies geschieht durch die Option --proxy. Der resultierende Befehl sieht also wie folgt aus:
+!!! note "Verwendung des Proxy"
+	In der Schule muss Python die Verwendung des Proxy mittgeteilt werden. Dies geschieht durch die Option --proxy. Der resultierende Befehl sieht also wie folgt aus:
 	```
 	pip --proxy http://kjs-03.lan.dd-schulen.de:3128  install mkdocs mkdocs-material
 	```
@@ -34,15 +34,15 @@ Projektverzeichnis
   \- index.md
 ```
 
-## Dokumentation lokal ansehen
+## Dokumentationen Lokal ansehen
 
-Dazu führt man mkdocs mit dem Unterbefehl serve wie folgt aus
+Dazu führt man mkdocs mit dem Unterbefehl `serve` wie folgt aus
 ```
 mkdocs serve
 ```
 
 !!! note "Befehl konnte nicht gefunden werden"
-	Falls ihr mkdocs installiert habt, es aber fon der git bahsh nicht gefunden werden kann, ist es wahrscheinlich nicht im Pfad enthalten. Für diesen Fall müsst ihr den Befehl `mkdocs` in diesem und weiteren Aufrufen ersetzen durch:
+	Falls mkdocs installiert ist, es aber von der Git Bash nicht gefunden werden kann, ist es wahrscheinlich nicht im PATH enthalten. Für diesen Fall muss der Befehl `mkdocs` durch folgenden Befehl ersetzt werden:
 	```
 	~/AppData/Roaming/Python/Python310/Scripts/mkdocs.exe
 	```
@@ -57,6 +57,31 @@ Um eine MkDocs-Seite über Github-Pages verfügbar zu machen, muss man zuerst de
 ```
 mkdocs gh-deploy
 ```
+```
+~/AppData/Roaming/Python/Python310/Scripts/mkdocs.exe gh-deploy
+```
 
 Anschließend sollte Github automatisch ein Github-Pages Environment hinzufügen, welches die Seite unter `https://<username>.github.io/<repositoryName>` verfügbar machen.
+
+## Optional: Einrichten einer CI-Pipeline
+
+Durch das einrichten einer CI-Pipeline kann man das aufrufen von `mkdocs gh-deploy` automatisieren. Dazu muss man folgenden Inhalt in die Datei `.github/workflows/ci.yml` im Projektverzeichnis schreiben:
+```
+name: ci 
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install mkdocs-material 
+      - run: mkdocs gh-deploy --force
+
+```
 
